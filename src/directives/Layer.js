@@ -56,6 +56,9 @@ angular.module('az.directives').
 					case 'wms':
 						lyrConstruct = maplib=='ol' ? ol_wms : leaflet_wms;
 						break
+					case 'osm':
+						lyrConstruct = ol_osm;
+						break
 					case 'geojson':
 						lyrConstruct = maplib=='ol' ? ol_geojson : leaflet_geojson;
 						break
@@ -114,6 +117,19 @@ angular.module('az.directives').
 					}
 				});
 				var layer = new OpenLayers.Layer.WMS(name, url, params, opts);
+				layer.mapLayer = inmap;
+				return layer
+			},
+		ol_osm = function(name, url, opts, inmap){
+				var paramKeys = ['tileOptions'];
+				var params = {};
+				$.each(paramKeys, function(index, val) {
+					if(val in opts) {
+						params[val] =  opts[val];
+						delete opts[val];
+					}
+				});
+				var layer = new OpenLayers.Layer.OSM(name, url, params, opts);
 				layer.mapLayer = inmap;
 				return layer
 			},
